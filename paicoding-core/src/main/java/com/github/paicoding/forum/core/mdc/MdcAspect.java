@@ -38,8 +38,10 @@ public class MdcAspect implements ApplicationContextAware {
     @Around("getLogAnnotation()")
     public Object handle(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
+        //判断
         boolean hasTag = addMdcCode(joinPoint);
         try {
+            //调用目标方法
             Object ans = joinPoint.proceed();
             return ans;
         } finally {
@@ -54,7 +56,9 @@ public class MdcAspect implements ApplicationContextAware {
     }
 
     private boolean addMdcCode(ProceedingJoinPoint joinPoint) {
+        //返回了方法签名
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        //获取方法名
         Method method = signature.getMethod();
         MdcDot dot = method.getAnnotation(MdcDot.class);
         if (dot == null) {
